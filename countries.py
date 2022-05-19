@@ -33,6 +33,9 @@ def GetAllCountries():
     if request:
         return ParseURLRequest(request)
 
+def GetAllCountriesCount():
+    return len(GetAllCountries())
+
 def GetCountryByName(name):
     request = GetURLRequest("{}/{}".format(URL_NAME, name))
     if request:
@@ -67,6 +70,8 @@ def GetCountriesInfo(countrieslist, info):
     info_list = []
     for country in countrieslist:
         info_list.append(country[info])
+    
+    return info_list
 
 def GetCountriesInfoTuple(countrieslist, info):
     info_list = []
@@ -79,12 +84,12 @@ def GetCountriesInfoTuple(countrieslist, info):
             print("{} dont have the info: {}".format(country["name"], info))
     
     return info_list
-            
+
+def GetCountryPopulation():
+    return GetCountriesInfoTuple(GetAllCountries(), 'population')
 
 def GetCountriesNamesList():
     return GetCountriesInfo(GetAllCountries(), "name")
 
 def GetCountriesCurrency():
     return GetCountriesInfoTuple(GetAllCountries(), "currencies")
-
-print(GetCountriesCurrency())
