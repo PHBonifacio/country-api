@@ -1,13 +1,9 @@
-import sys
+
+import argparse
 
 from countries import *
 
 avaiable_commands = ["Currency", "Name", "Population"]
-
-def PrintHelp():
-    print("Usage Country API: python country_api.py command")
-    for cmd in avaiable_commands:
-        print("\t {}".format(cmd))
 
 def IndexOfArgument(argv, arg):
     try:
@@ -18,24 +14,24 @@ def IndexOfArgument(argv, arg):
 
 
 if __name__ == "__main__":
-    if 1 == len(sys.argv):
-        PrintHelp()
-    else:
-        try:
-            cmd = avaiable_commands.index(sys.argv[1])
-            match(cmd):
-                case 0:
-                    print(GetCountriesCurrency())
-                case 1:
-                    print(GetCountriesNamesList())
-                case 2:
-                    print(GetCountryPopulation())
-                case _:
-                    pass
-        except ValueError:
-            print("The command \'{}\' doesn't exist\n".format(sys.argv[1]))
-            PrintHelp()
-        except Exception as e:
-            print(e)
+    parser = argparse.ArgumentParser(prog='country_api', description='Get informormation from any country')
+    parser.add_argument('command', help='Chose what command should execute', choices=avaiable_commands)
+    parser.add_argument('-c', '--country', help='Complete or part of a country name', default=None)
+    parser.add_argument('-f', '--full', help='Enforce country full name', action='store_true')
+    parser.add_argument('-m', '--max', help='Max number of results', action='store')
+    args = parser.parse_args()
+    try: 
+        match(avaiable_commands.index(args.command)):
+            case 0:
+                print(GetCountriesCurrency())
+            case 1:
+                print(GetCountriesNamesList(args.country, args.full))
+            case 2:
+                print(GetCountryPopulation())
+            case _:
+                pass
+
+    except Exception as e:
+        print(e)
         
     

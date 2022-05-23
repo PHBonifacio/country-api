@@ -36,8 +36,13 @@ def GetAllCountries():
 def GetAllCountriesCount():
     return len(GetAllCountries())
 
-def GetCountryByName(name):
-    request = GetURLRequest("{}/{}".format(URL_NAME, name))
+def GetCountryByName(name, fullName):
+    if fullName:
+        reqTxt = "{}/{}?fullText=true".format(URL_NAME, name)
+    else:
+        reqTxt = "{}/{}".format(URL_NAME, name)
+
+    request = GetURLRequest(reqTxt)
     if request:
         return ParseURLRequest(request)
 
@@ -85,11 +90,17 @@ def GetCountriesInfoTuple(countrieslist, info):
     
     return info_list
 
-def GetCountryPopulation():
-    return GetCountriesInfoTuple(GetAllCountries(), 'population')
+def GetCountryPopulation(name):
+    if name:
+        return GetCountriesInfoTuple(GetCountryByName(name), 'population')
+    else:
+        return GetCountriesInfoTuple(GetAllCountries(), 'population')
 
-def GetCountriesNamesList():
-    return GetCountriesInfo(GetAllCountries(), "name")
+def GetCountriesNamesList(name, full):
+    if name:
+        return GetCountriesInfoTuple(GetCountryByName(name, full), 'name')
+    else:
+        return GetCountriesInfoTuple(GetAllCountries(), 'name')
 
 def GetCountriesCurrency():
     return GetCountriesInfoTuple(GetAllCountries(), "currencies")
