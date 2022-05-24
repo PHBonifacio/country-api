@@ -79,28 +79,49 @@ def GetCountriesInfo(countrieslist, info):
     return info_list
 
 def GetCountriesInfoTuple(countrieslist, info):
-    info_list = []
-    for country in countrieslist:
-        try:
-            if country[info]:
-                info_list.append((country["name"], country[info]))
-        except Exception as e:
-            print(e)
-            print("{} dont have the info: {}".format(country["name"], info))
+    info_list = None
+    if countrieslist:
+        info_list = []
+        for country in countrieslist:
+            try:
+                if country[info]:
+                    info_list.append((country["name"], country[info]))
+            except Exception as e:
+                print(e)
+                print("{} dont have the info: {}".format(country["name"], info))
     
     return info_list
 
-def GetCountryPopulation(name):
+def GetCountryPopulation(name, full):
     if name:
-        return GetCountriesInfoTuple(GetCountryByName(name), 'population')
+        rst = GetCountriesInfoTuple(GetCountryByName(name, full), 'population')
+        if rst:
+            result = []
+            for item in rst:
+                result.append((item[0]['common'], item[1]))
+            return result
     else:
         return GetCountriesInfoTuple(GetAllCountries(), 'population')
 
 def GetCountriesNamesList(name, full):
     if name:
-        return GetCountriesInfoTuple(GetCountryByName(name, full), 'name')
+        rst =  GetCountriesInfo(GetCountryByName(name, full), 'name')
+        if rst:
+            names = []
+            for item in rst:
+                names.append(item['common'])
+            return names
     else:
-        return GetCountriesInfoTuple(GetAllCountries(), 'name')
+        return GetCountriesInfo(GetAllCountries(), 'name')
 
-def GetCountriesCurrency():
-    return GetCountriesInfoTuple(GetAllCountries(), "currencies")
+def GetCountriesCurrency(name, full):
+    if name:
+        rst =  GetCountriesInfoTuple(GetCountryByName(name, full), 'currencies')
+        if rst:
+            result = []
+            for item in rst:
+                for curr in item[1]:
+                    result.append((item[0]['common'], (curr, item[1][curr]['name'], item[1][curr]['symbol'])))
+            return result
+    else:
+        return GetCountriesInfoTuple(GetAllCountries(), 'currencies')

@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}\\country_api.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["Name"]
+            "args": ["Name", "-c", "En"]
         }
     ]
 }

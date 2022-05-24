@@ -12,7 +12,6 @@ def IndexOfArgument(argv, arg):
         print("The command \'{}\' doesn't exist\n".format(arg))
         return 0
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='country_api', description='Get informormation from any country')
     parser.add_argument('command', help='Chose what command should execute', choices=avaiable_commands)
@@ -23,11 +22,29 @@ if __name__ == "__main__":
     try: 
         match(avaiable_commands.index(args.command)):
             case 0:
-                print(GetCountriesCurrency())
+                result = GetCountriesCurrency(args.country, args.full)
+                print("GetCountriesCurrency")
+                if result :
+                    for country in result:
+                        print("\t >> {} : {}".format(country[0], country[1]))
+                else:
+                    print("\t >> Not found")
             case 1:
-                print(GetCountriesNamesList(args.country, args.full))
+                result = GetCountriesNamesList(args.country, args.full)
+                print("GetCountriesNamesList")
+                if result :
+                    for name in result:
+                        print("\t >> {}".format(name))
+                else:
+                    print("\t >> Not found")
             case 2:
-                print(GetCountryPopulation())
+                result = GetCountryPopulation(args.country, args.full)
+                print("GetCountryPopulation")
+                if result :
+                    for country in result:
+                        print("\t >> {} : {}".format(country[0], country[1]))
+                else:
+                    print("\t >> Not found")
             case _:
                 pass
 
